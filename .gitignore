@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Local configuration files
+.color_mappings.json
+.env
+.service_key.json

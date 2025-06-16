@@ -1,0 +1,13 @@
+{
+  "1": {"meaning": "Category 1", "color": "basil"},
+  "2": {"meaning": "Category 2", "color": "sage"},
+  "3": {"meaning": "Category 3", "color": "grape"},
+  "4": {"meaning": "Category 4", "color": "flamingo"},
+  "5": {"meaning": "Category 5", "color": "banana"},
+  "6": {"meaning": "Category 6", "color": "tangerine"},
+  "7": {"meaning": "Category 7", "color": "peacock"},
+  "8": {"meaning": "Category 8", "color": "graphite"},
+  "9": {"meaning": "Category 9", "color": "blueberry"},
+  "10": {"meaning": "Category 10", "color": "lavender"},
+  "11": {"meaning": "Category 11", "color": "tomato"}
+}

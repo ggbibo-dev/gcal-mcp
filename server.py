@@ -19,13 +19,13 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import os
 from collections import defaultdict
-from enum import Enum
 
 # Google API Credentials
 SERVICE_ACCOUNT_FILE = ".service_key.json"
+COLOR_MAPPING_CONFIG = ".color_mappings.json"
 SCOPES = [
     "https://www.googleapis.com/auth/calendar.events",
-    "https://www.googleapis.com/auth/calendar.readonly"
+    "https://www.googleapis.com/auth/calendar.readonly",
 ]
 
 # Authenticate and create service
@@ -38,20 +38,16 @@ service = build("calendar", "v3", credentials=credentials)
 load_dotenv()
 CALENDAR_ID = os.getenv("CALENDAR_ID")
 
-# Mapping between colorId and its string interpretation
-COLOR_ID_MEANINGS = {
-    "1": "Personal Development",
-    "2": "Undefined2",
-    "3": "Yelp Work",
-    "4": "Undefined4",
-    "5": "Sleep",
-    "6": "Religious Reflections",
-    "7": "Undefined7",
-    "8": "Misc Errands and Tasks",
-    "9": "Undefined9",
-    "10": "Cooldown / Walking",
-    "11": "GYM / Workout"
-}
+# Load color meanings from local JSON config
+def load_color_mappings():
+    try:
+        with open(COLOR_MAPPING_CONFIG, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        logger.warning("color_mappings.json not found, you won't be able to see the breakdown :(")
+        return defaultdict()
+
+COLOR_ID_MEANINGS = load_color_mappings()
 
 # Add an addition tool
 @mcp.tool()
@@ -89,10 +85,11 @@ async def calendar_analysis(start_date: str, end_date: str) -> tuple:
     for color_id, total_duration in color_durations.items():
         color_value = await map_color(color_id)
         logger.info(f"Mapping color_id {color_id} to color value {color_value}")
-        human_label = COLOR_ID_MEANINGS.get(color_id, f"Unknown ({color_id})")
-        breakdown[human_label] = {
+        human_label = COLOR_ID_MEANINGS.get(color_id, {"meaning": f"Unknown ({color_id})", "color": "unknown"})
+        breakdown[human_label["meaning"]] = {
             "duration": total_duration,
-            "color": color_value
+            "color": color_value.get("background") if color_value else None,
+            "color_name": human_label["color"]
         }
 
     total = sum(item["duration"] for item in breakdown.values())
@@ -131,7 +128,7 @@ def duration(event_start: dict, event_end: dict) -> int:
 async def map_color(color_id: str) -> Optional[dict]:
     """Fetch the color value for a given colorId from Google Calendar Colors API."""
     colors_result = await asyncio.to_thread(service.colors().get().execute)
-    logger.info(f"colors_result: {json.dumps(colors_result, indent=2)}")
+    # logger.info(f"colors_result: {json.dumps(colors_result, indent=2)}")
     event_colors = colors_result.get("event", {})
     color_info = event_colors.get(color_id, {})
     return color_info
@@ -140,6 +137,3 @@ async def map_color(color_id: str) -> Optional[dict]:
 if __name__ == "__main__":
     # Initialize and run the server
     mcp.run(transport='stdio')
-    # Fix: test with correct date order and print result
-    # result = asyncio.run(calendar_analysis("2025-05-17", "2025-05-18"))
-    # print(result)
