@@ -1,4 +1,4 @@
-# Notion Calendar API Setup
+# Calendar API Setup
 
 Follow these steps to set up the Notion Calendar API integration:
 
