@@ -1,8 +1,8 @@
-# Calendar API Setup
+### Calendar API Setup
 
 Follow these steps to set up the Notion Calendar API integration:
 
-## 1. Set Up a Service Account in Google Cloud Platform (GCP)
+#### 1. Set Up a Service Account in Google Cloud Platform (GCP)
 
 1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
 2. Create a new project or select an existing one.
@@ -15,7 +15,7 @@ Follow these steps to set up the Notion Calendar API integration:
 9. Click **Add Key > Create new key**.
 10. Select **JSON** and click **Create**. Download and securely store the JSON key file.
 
-## 2. Share the Calendar with the Service Account
+#### 2. Share the Calendar with the Service Account
 
 1. Open [Google Calendar](https://calendar.google.com/).
 2. Find the calendar you want to use and click the three dots next to it.
@@ -27,7 +27,7 @@ Follow these steps to set up the Notion Calendar API integration:
 
 Your service account now has access to the calendar and can manage events via the API.
 
-## 3. Configure Color Mappings
+#### 3. Configure Color Mappings
 
 The application uses color IDs to categorize calendar events. You need to create a local configuration file to map these color IDs to meaningful category names.
 
@@ -55,7 +55,7 @@ The application uses color IDs to categorize calendar events. You need to create
 
    **Note**: `color_mappings.json` is ignored by git to keep your personal categorizations private.
 
-## 4. Environment Setup
+#### 4. Environment Setup
 
 Create a `.env` file with your calendar ID:
 
@@ -63,7 +63,7 @@ Create a `.env` file with your calendar ID:
 CALENDAR_ID=your-email@gmail.com
 ```
 
-## 5. Installation and Usage
+#### 5. Installation and Usage
 
 1. Install dependencies:
 
